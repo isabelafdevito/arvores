@@ -1,0 +1,23 @@
+#include<iostream> 
+#include<iomanip>
+using namespace std; 
+
+// função para definir o calc do peso ideal
+
+float ideal(float h, char sexo) {
+	if(sexo=='M') 
+		return (72.7*h - 58.0);
+	else if (sexo=='F')
+		return (62.1*h - 44.7);
+	
+}
+
+int main () {
+	float alt; // var para altura da pessoa
+	char sexo; // var para o sexo da pessoa 
+	cin >> alt; 
+	cin >> sexo; 
+	cout << fixed << setprecision(2) << endl; 
+	cout << "Peso ideal = "<< ideal(alt,sexo) << " kg" << endl;
+	return 0;
+}
