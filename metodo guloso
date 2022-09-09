@@ -1,0 +1,62 @@
+#include<iostream> 
+#include<climits> 
+
+using namespace std; 
+
+int main () {
+	
+	int n; // numero de cidades
+	cin >> n; 
+	
+	int custo[n][n]; // custo de cada caminho ate o outro 
+	
+	int inicial; // cidade onde começa 
+
+	
+	// colocando o custo de cada caminho ate o outro 
+	for (int i=0; i< n; i++) {
+		for (int j=i+1; j<n; j ++) { // o j=i+1 pois os caminhos calculados serao por exemplo N=3 // 0-1, 0-2, 0-3 / 1-2, 1-3 / 2-3
+			cin >> custo[i][j]; 
+			custo[j][i]=custo[i][j]; 
+		}
+	}
+	
+	cin >> inicial;
+	
+	bool visita[n]; // saber se aquela cidade ja foi visitada ou nao
+	int menor_custo; 
+	int custo_atual; 
+	int cidade_atual; 
+	int proxima_cidade; 
+	
+	// iniciando o vetor visita
+	for (int i=0; i<n; i++) 
+		visita[i]=false; 
+	
+	// guloso
+	
+	menor_custo=0; 
+	cidade_atual=inicial; 
+	for (int i=0;i<n-1;i++) { // qnt de caminhos é n-1 porque a gente desconsidera a volta da ultima cidade pra inicial 
+		
+		visita[cidade_atual]=true; // cidade inicial ja foi visitada
+		custo_atual= INT_MAX; // maior valor que o custo pode assumir 
+		
+		for (int j=0; j<n; j++) {
+			if (!visita[j] && custo_atual>custo[cidade_atual][j]) {
+				
+				proxima_cidade=j; 
+				custo_atual = custo[cidade_atual][j]; 
+			}
+		}
+		menor_custo+=custo_atual; // custo que voce tinha da primeira cidade pra segunda, depois mais a da segunda pra terceira
+        cidade_atual=proxima_cidade; // para definir que essa cidade ja vai ter sido visitada agora no bool 
+	}
+	
+	// para completar adicionar o caminho da ultima cidade ate a primeira 
+	menor_custo+=custo[cidade_atual][inicial];
+	cout << menor_custo << endl; 
+	
+	return 0; 
+	
+}
