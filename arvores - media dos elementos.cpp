@@ -1,47 +1,86 @@
-#include<iostream>
-#include<iomanip>
+#include <iostream>
+#include <iomanip>
+
 using namespace std;
 
-struct treenode {
-	int info; // raiz 
-	treenode *esq; // sub-arvore esquerda
-	treenode *dir; //sub - arvore direita
-}; 
 
-typedef treenode *treenodeptr; // definindo uma variavel tipo treenode
+struct treenode
+{
+	int info;
+	treenode *esq;
+	treenode *dir;
 
-void tInsere(treenodeptr &p, int x) {
-	if(p==NULL) { // insere na raiz pq vai estar vazio
-	p = new treenode; 
-	p->info = x;
-	p->esq = NULL; 
-	p->dir = NULL;
-}
-	else 
-		if(x <p->info) // insere a esquerda
-			tInsere(p->esq,x);
-		else // insere a direita
-			tInsere(p->dir,x); 
-}
+};
 
-int main() {
-	treenodeptr arvore = NULL; // começa com NULL
-	int mediana=0;
-	int total=0;
-	int x=0; // elemento a ser inserido
-	while(x!=-1) {
-		cin >> x; 
-		tInsere(arvore,x);
-		if(x!=-1) {
-		mediana+=x;
-		total++;
-		}
+
+typedef treenode *treenodeptr;
+
+float soma = 0;
+int n = 0;
+
+void tInsere(treenodeptr &p, int x)
+{
+	if (p == NULL) // insere na raiz
+	{
+		p = new treenode;
+		p->info = x;
+		p->esq = NULL;
+		p->dir = NULL;
 	}
-	cout << fixed << setprecision(2);
-	cout << "Media: " << 1.0*mediana/total << endl;
+	else if (x < p->info) // insere na subarvore esquerda
+		tInsere(p->esq, x);
+	else // insere na subarvore direita
+		tInsere(p->dir, x);
+}
+
+treenodeptr tPesq(treenodeptr p, int x)
+{
+	if (p == NULL) // elemento n~ao encontrado
+		return NULL;
+	else if (x == p->info) // elemento encontrado na raiz
+		return p;
+	else if (x < p->info) // procura na sub�arvore esquerda
+		return tPesq(p->esq, x);
+	else // procura na sub�arvore direita
+		return tPesq(p->dir, x);
+
+
+}
+
+
+
+void Medias (treenodeptr arvore)
+{
+	if (arvore != NULL)
+	{
+		Medias(arvore->dir);
+		soma += arvore->info;
+		n++;
+		Medias(arvore->esq);
 	
-		
-		
-		
-		return 0;
+	}
+}
+
+
+int main()
+{
+	int x = 0;
+	treenodeptr arvore = NULL;
+	treenodeptr p = NULL;
+
+
+	cin >> x;
+
+	while(x != -1)
+	{
+		tInsere(arvore, x);
+		cin >> x;
+
+	}
+	
+	Medias(arvore);
+	cout << "Media: " << fixed << setprecision(2) <<(soma/n)*1.0 << endl;
+
+
+	return 0;
 }
