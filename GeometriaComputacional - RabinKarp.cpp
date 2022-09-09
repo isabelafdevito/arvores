@@ -10,8 +10,6 @@ void rabin_karp(char T[], char P[], int tamT, int tamP, int d, int q)
 	int h; // valor utilizado para calculo de hash
 	int p = 0; // padrao convertido para inteiro
 	int t = 0; // texto convertido para inteiro
-	int n;
-	int cont = 0;
 
 	for(int i = 0; i < tamP; i++)
 	{
@@ -35,10 +33,7 @@ void rabin_karp(char T[], char P[], int tamT, int tamP, int d, int q)
 				}
 			}
 
-			if(j == tamP){
-			n = i;
-			cont++;	
-			} 
+			if(j == tamP) cout << i << endl;
 		}
 
 		if(i < tamT - tamP) // se ainda nao cheguei no final
@@ -47,31 +42,27 @@ void rabin_karp(char T[], char P[], int tamT, int tamP, int d, int q)
 			if(t < 0) t += q;
 		}
 	}
-if(cont !=0) {
-	cout << P << endl;
-}
+
 }
 
 int main()
 {
 
-	char texto[1000];
+	char texto[100];
 	char padrao[100];
-	int tamtxt;
-	int tampad;
 
 	// cardinalidade do alfabeto usado no texto, em outras palavras, qtd de caracteres diferentes utilizados
 	int d = 10;
 	// n�mero primo grande, para calcular os valores no hash
 	int q = 13;
-	int n;
-	cin >> n;
+
+	cout << "Digite o texto: ";
 	cin >> texto;
-	for(int i=0;i<n;i++) {
+	
+	cout << "Agora, digite o padrao a ser buscado: ";
 	cin >> padrao;
-	tamtxt = strlen(texto);
-	tampad = strlen(padrao);
-	rabin_karp(texto, padrao, tamtxt, tampad, d, q);
-	}
+
+	rabin_karp(texto, padrao, strlen(texto), strlen(padrao), d, q);
+
 	return 0;
 }
