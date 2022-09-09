@@ -1,63 +1,85 @@
 #include<iostream>
+#include<list>
 using namespace std;
 
-struct treenode {
-	int info; // raiz 
-	treenode *esq; // sub-arvore esquerda
-	treenode *dir; //sub - arvore direita
-}; 
+struct treenode
+{
+    int info;
+    treenode *esq;
+    treenode *dir;
+};
+typedef treenode *treenodeptr;
 
-typedef treenode *treenodeptr; // definindo uma variavel tipo treenode
-
-void tInsere(treenodeptr &p, int x) {
-	if(p==NULL) { // insere na raiz pq vai estar vazio
-		p = new treenode; 
-	p->info = x;
-	p->esq = NULL; 
-	p->dir = NULL;
-}
-	else 
-		if(x <p->info) // insere a esquerda
-			tInsere(p->esq,x);
-		else // insere a direita
-			tInsere(p->dir,x); 
-}
-
-// funcao para pesquisar se um elemento esta na arvore
-treenodeptr tPesq(treenodeptr p, int x) {
-	if(p==NULL) // arvore vazia = elemento n encontrado
-		return NULL;
-	else 
-		if(x==p->info) // elemento encontrado na raiz
-			return p;
-		else 
-			if(x<p->info) // procura na esquerda
-				return tPesq(p->esq,x); 
-			else // procura na direita
-				return tPesq(p->dir,x);
+void tInsere(treenodeptr &p, int x)
+{
+    if (p == NULL) // insere na raiz
+    {
+        p = new treenode;
+        p->info = x;
+        p->esq = NULL;
+        p->dir = NULL;
+    }
+    else if (x < p->info) // insere na subarvore esquerda
+        tInsere(p->esq, x);
+    else // insere na subarvore direita
+        tInsere(p->dir, x);
 }
 
-// quantidade de folhas em uma arvore
-int qnt_folhas(treenodeptr p) {
-	if(p==NULL)  // arvore vazia 
-		return 0;
-	else if(p->esq == NULL && p->dir == NULL) // sÛ tem uma folha {
-		return 1;
-	else 
-		return qnt_folhas(p->esq) + qnt_folhas(p->dir);
+int contaFolhas(treenodeptr t)
+{
+    list<treenodeptr> q; // fila auxiliar
+    treenodeptr n = t; // ponteiro para varrer a √°rvore
+    int nFolhas = 0;
+    
+    if (t != NULL)
+    {
+        q.push_front(n);
+        while (!q.empty())
+        {
+            n = q.front();
+            q.pop_front();
+            if (n->esq != NULL)
+                q.push_back(n->esq);
+            if (n->dir != NULL)
+                q.push_back(n->dir);
+            if(n->esq==NULL && n->dir==NULL)
+                nFolhas++;
+        }
+    }
+    return nFolhas;
 }
-int main() {
-	treenodeptr arvore = NULL; // comeÁa com NULL
-	
-	int x=0; // elemento a ser inserido
-	while(x!=-1) {
-		cin >> x; 
-		if(x!=-1) {
-		tInsere(arvore,x);
-		}
-	}
-		cout << qnt_folhas(arvore) << endl;
-		
-		
-		return 0;
+
+
+void tDestruir (treenodeptr &arvore)
+{
+    if (arvore != NULL)
+    {
+        tDestruir(arvore->esq);
+        tDestruir(arvore->dir);
+        delete arvore;
+    }
+    arvore = NULL;
+}
+
+int main()
+{
+    treenodeptr arvore=NULL; // ponteiro para a arvore
+    int x; // var aux para leitura dos dados
+    
+    // Lendo dados e armazenando na arvore
+    cin >> x;
+    while(x!=-1)
+    {
+        tInsere(arvore,x);
+        cin >> x;
+    }
+    
+    // Mostrando o n√∫mero de folhas
+    cout << contaFolhas(arvore) << endl;
+    
+    // Liberando a memoria usada pela arvore
+    tDestruir(arvore);
+    
+    
+    return 0;
 }
