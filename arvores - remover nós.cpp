@@ -81,20 +81,20 @@ void tDestruir(treenodeptr &arvore) {
 
 treenodeptr tPesq(treenodeptr p, int x){
 	
-	if (p == NULL) // elemento não encontrado
+	if (p == NULL) // elemento nÃ£o encontrado
 		return NULL;
 	else if (x == p->info) // elemento encontrado na raiz
 		return p;
 	else 
-		// procura na sub ´arvore esquerda
+		// procura na sub Â´arvore esquerda
 		if (x < p->info) 
 			return tPesq(p->esq,x);
-		// procura na sub ´arvore direita
+		// procura na sub Â´arvore direita
 		else  
 			return tPesq(p->dir,x);
 }
 int main() {
-	treenodeptr arvore = NULL; // começa com NULL
+	treenodeptr arvore = NULL; // comeÃ§a com NULL
 	
  
 	int x=-1; // elemento a ser inserido
