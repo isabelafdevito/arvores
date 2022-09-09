@@ -1,0 +1,104 @@
+#include<iostream>
+using namespace std;
+
+struct dado 
+{
+	int k; // chave
+	int status; // 0=livre / 1=ocupado
+};
+
+// função que implementa a posição que a chave k vai ficar
+int hash_aux(int k, int m) 
+{
+	
+	int h; // posição
+	h=k%m;
+	if (h<0) {
+		h=h+m; 
+		}
+	return h;
+}
+
+// implementando a sondagem linear
+int hash1 (int k, int i, int m) 
+{
+	return (hash_aux(k,m)+i)%m;
+}
+
+// insere a chave k em uma tabela de tamanho m
+int hash_insert(dado T[], int m, int k) 
+{
+	int i=0;
+	int j; // posição da chave
+	do {
+		j=hash1(k,i,m);
+		if (T[j].status!=1) 
+		{
+			T[j].k=k;
+			T[j].status=1;
+			return j;
+		} else
+		{
+			i++;
+		}
+	} while (i!=m);
+	return -1; // tabela cheia
+} 
+
+int hash_search(dado T[],int k, int m) {
+ int i=0;
+ int j; // posição da chave
+	do 
+	{
+		j=hash1(k,i,m);
+		if (T[j].k==k) 
+			return j;
+		else 
+			i++;
+	} while (T[j].status!=0 || i < m);
+	return -1;
+}
+ 
+int hash_delete(dado T[], int k, int m) {
+	int j; 
+	j=hash_search(T,k,m);
+	if(j!=-1) {
+		T[j].status=2; // status = 2 - removido
+		T[j].k=-1;
+		return 0;
+	} else
+		return -1;
+
+}
+int main () {
+	int i;
+	dado T[20]; // tabela hash
+	// ler o tamaho da tabela 
+	int m;
+	cin >> m;
+	
+	// inicializar a tabela
+	for (i=0; i<m; i++) {
+		T[i].k=-1;
+		T[i].status=0;
+	}
+	
+	// ler as chaves e inserir na tabela
+	int k;
+	cin >> k;
+	while (k!=0) {
+		hash_insert(T,m,k);
+		cin >> k;
+	}
+		int s;
+		cin >> s; // chave a ser removida
+		hash_delete(T,s,m);
+		
+		// Mostrar a tabela
+		for (i=0;i<m;i++){
+			cout << T[i].k << " ";
+		} cout << endl;
+	
+	return 0;
+	
+}
