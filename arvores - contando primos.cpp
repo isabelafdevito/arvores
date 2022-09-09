@@ -56,7 +56,7 @@ int contaPrimos(treenodeptr arvore)
             if(arvore->info % i == 0)
                 div++;
         }
-        if(div < 3)
+        if(div == 2)
             primo++;
 
         primo += contaPrimos(arvore->dir);
