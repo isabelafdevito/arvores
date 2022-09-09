@@ -73,7 +73,7 @@ void emOrdem(treenodeptr arvore) {
 }
 
 int main() {
-	treenodeptr arvore = NULL; // começa com NULL
+	treenodeptr arvore = NULL; // comeÃ§a com NULL
 	int x=1; // elemento a ser inserido
 	while(x!=0) {
 		cin >> x; 
