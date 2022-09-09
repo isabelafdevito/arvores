@@ -25,7 +25,7 @@ void tInsere(treenodeptr &p, int x) {
 }
 
 int main() {
-	treenodeptr arvore = NULL; // começa com NULL
+	treenodeptr arvore = NULL; // comeÃ§a com NULL
 	int maior = -1;
 	int menor = 9999;
 	int x=0; // elemento a ser inserido
