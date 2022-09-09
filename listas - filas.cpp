@@ -12,7 +12,7 @@ int main () {
 		cin >>x;
 		fila.push_back(x);
 		// na pilha, cada novo numero é colocado na frente do anterior
-		//na lista, cada novo numero é colocado depois do anterior
+		//na fila, cada novo numero é colocado depois do anterior
 	}
 	
 	// remover os dados da pilha e ir mostrando
