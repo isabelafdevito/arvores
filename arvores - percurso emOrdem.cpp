@@ -24,7 +24,7 @@ void tInsere(treenodeptr &p, int x) {
 		else // insere a direita
 			tInsere(p->dir,x); 
 }
-// ordenação DECRESCENTE (dir maior que esq)
+// ordenaÃ§Ã£o DECRESCENTE (dir maior que esq)
 
 void emOrdem (treenodeptr p,int &y) {
 	int maior = -9999;
@@ -39,7 +39,7 @@ void emOrdem (treenodeptr p,int &y) {
 	
 }
 int main() {
-	treenodeptr arvore = NULL; // começa com NULL
+	treenodeptr arvore = NULL; // comeÃ§a com NULL
 	int x=0; // elemento a ser inserido
 	while(x!=-1) {
 		cin >> x; 
