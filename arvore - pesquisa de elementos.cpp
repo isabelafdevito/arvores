@@ -110,6 +110,7 @@ int main() {
         cout << "Elemento " << y << " encontrado!" << endl;
         tRemove(arvore,y);
     }
+    //mostrando os elementos da arvore apos a remocao:
     emOrdem(arvore);
     tDestruir(arvore);
 
