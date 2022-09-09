@@ -1,0 +1,61 @@
+#include <iostream> 
+#include <climits> // INT_MAX
+#include <algorithm> // next_permutation: Reordena os elementos em um intervalo para que a ordenação original seja substituída pela próxima permutação lexicograficamente maior
+using namespace std;
+
+int main()
+{
+	int n; // numero de focos de dengue 
+	
+	cin >> n; 
+	
+	int inicial; // onde fica a casa de joao 
+	
+	int custo[n][n]; // 10 -> numero maximo de pontos de dengue
+	// custo[i][j] = custo de ir do ponto 'i' para o ponto 'j'
+	
+	int v[n]; // distancia entre os pontos da casa e dos focos de dengue 
+	
+	for(int i=0; i<n; i++) {
+		for (int j=i+1; j<n; j++) {
+			cin >> custo[i][j]; // custo de ir pra um ponto até o outro
+			custo[j][i]=custo[i][j]; 
+		}
+	} 
+	cin >> inicial; // casa de joao no ponto 0
+
+	
+	int menor_custo; // menor custo a ser comparado
+	int custo_caminho; // caminhos a serem calculados 
+	
+	int p=0; // var auxiliar 
+	for (int i=0; i<n;i++) {
+		if(i != inicial ) {
+			v[p]=i; // ordenar as cidades, cidade 1 na posição 0, cidade 2 na posição 1, cidade 3 na posição 2...
+			p++;
+		}
+	}
+	
+	// forca bruta
+	
+	menor_custo= INT_MAX; // inicializar com o maior valor que um int pode assumir para que o primeiro menor custo seja do primeiro caminho a fins de comparaçãp
+	
+	do {
+		
+		custo_caminho = custo[inicial][v[0]]; // custo de ir da cidade inicial ate a primeira cidade do vetor 
+		
+		for(int i=0; i< n-2; i++)
+			custo_caminho += custo[v[i]][v[i+1]]; // custo de ir da primeira cidade do vetor ate a segunda e ai por diante
+	
+	    custo_caminho += custo[v[n-2]][inicial]; // custo da ultima cidade do vetor até a cidade inicial 		
+		
+		menor_custo=min(menor_custo,custo_caminho); 
+		
+	} while(next_permutation(v,v+(n-1))); // permutação da quantidade de cidades a serem analisadas menos a cidade inicial
+	//next_permutation(vetor,vetor+tamanho);
+	
+	cout << menor_custo << endl; // saida do menor caminho para passar todos os focos de dengue 
+	
+	return 0; 
+	
+}
