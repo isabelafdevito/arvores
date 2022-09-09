@@ -3,7 +3,7 @@
 
 using namespace std;
 
-// Struct para armazenar os elementos de uma árvore binária
+// Struct para armazenar os elementos de uma Ã¡rvore binÃ¡ria
 struct treenode
 {
     int info;
@@ -12,7 +12,7 @@ struct treenode
 };
 typedef treenode *treenodeptr;
 
-// Insere elementos em uma árvore binária
+// Insere elementos em uma Ã¡rvore binÃ¡ria
 void tInsere(treenodeptr &p, int x)
 {
     if (p == NULL) // raiz
@@ -27,7 +27,7 @@ void tInsere(treenodeptr &p, int x)
     else // subarvore direita
         tInsere(p->dir, x);
 }
-// Realiza um percurso em nível na árvore
+// Realiza um percurso em nÃ­vel na Ã¡rvore
 void emNivel(treenodeptr t, int &soma)
 {
     treenodeptr n;
@@ -52,7 +52,7 @@ int main()
 {
     treenodeptr arvore = NULL;
     int x;
-    // Lendo elementos e inserindo na árvore
+    // Lendo elementos e inserindo na Ã¡rvore
     cin >> x;
     while(x != -1)
     {
@@ -60,7 +60,7 @@ int main()
         tInsere(arvore, x);
         cin >> x;
     }
-    // Percurso em nível
+    // Percurso em nÃ­vel
     int soma=0;
     emNivel(arvore,soma);
     
