@@ -1,0 +1,33 @@
+#include<iostream>
+#include<list>
+using namespace std;
+
+int soma(list<int> lista) {
+	int soma=0;
+	list<int>::iterator p;
+	for(p=lista.begin();p!=lista.end();p++) {
+		soma = soma + *p; 	}
+		
+		return soma; 
+	
+}
+
+int main () {
+	list<int> lista; 
+	list<int>::iterator p; // ponteiro para lista;
+	int x;
+
+	
+	// ler dados e inserir na pilha 
+		cin >>x;
+	while(x!=0) {
+		lista.push_back(x);
+		cin >>x;
+		// na pilha, cada novo numero é colocado na frente do anterior
+		//na lista, cada novo numero é colocado depois do anterior
+	}
+	
+	cout << soma(lista) << endl; ; 
+
+	return 0;
+}
