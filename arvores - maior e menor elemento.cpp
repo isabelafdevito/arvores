@@ -44,28 +44,44 @@ void tDestruir (treenodeptr &arvore)
     arvore = NULL;
 }
 
-void Maimer(treenodeptr arvore, int &maior, int &menor)
-{
-    if (arvore != NULL)
-    {
-        if(arvore->info > maior)
-            maior = arvore->info;
-        if(arvore->info < menor)
-            menor = arvore->info;
-        Maimer(arvore->dir, maior, menor);
-        //	cout << arvore->info << " ";
-        Maimer(arvore->esq, maior, menor);
+int maior(treenodeptr arvore) {
+
+    int maior_arv; 
+    maior_arv=arvore->info;
+    while(arvore->dir != NULL) {
+        if(maior_arv < arvore->dir->info) {
+            maior_arv = arvore->dir->info;
+        }
+        arvore->dir = arvore->dir->dir;
+
     }
+
+    return maior_arv;
+
 }
+
+int menor(treenodeptr arvore) {
+
+
+    int menor_arv; 
+    menor_arv=arvore->info; 
+    while(arvore->esq != NULL) {
+        if(menor_arv > arvore->esq->info) {
+            menor_arv = arvore->esq->info;
+        }
+        arvore->esq = arvore->esq->esq;
+
+    }
+    return menor_arv;
+
+}
+
 
 
 int main()
 {
-    int x = 0;
-    int maior = -50000;
-    int menor = 1000000;
+    int x;
     treenodeptr arvore = NULL;
-    treenodeptr p = NULL;
 
 
     cin >> x;
@@ -77,9 +93,8 @@ int main()
 
     }
 
-    Maimer(arvore, maior, menor);
 
-    cout << "Menor: " <<  menor << " e " <<  "Maior: " << maior << endl;
+    cout  <<  menor(arvore) << " e "  << maior(arvore) << endl;
     tDestruir(arvore);
 
 
