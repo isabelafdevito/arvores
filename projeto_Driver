@@ -1,0 +1,334 @@
+#include <iostream>
+#include <list>
+#include <climits>
+#include <algorithm>
+using namespace std;
+
+// struct para montar o grafo
+struct no
+{
+	int v; // vertice de destino da aresta
+	int peso; // peso da aresta
+};
+
+struct pessoitas
+{
+	int origem;
+	int destino;
+};
+// função que cria a aresta do grafo
+void cria_aresta(list<no>adj[], int u, int v, int p, int orientado)
+{
+	no aux; // var aux para inserir as arestas em adj
+
+	aux.v = v;
+	aux.peso = p;
+	adj[u].push_back(aux);
+	if(orientado == 0)
+	{
+		aux.v = u;
+		adj[v].push_back(aux);
+	}
+}
+
+// função que calcula o menor custo dos caminhos do grafo
+list<int> dijkstra(list<no>adj[], int nVertices, int start, int end, int &resp)
+{
+	bool intree[100];
+	int distance[100];
+	int parent[100];
+	list<int> caminho; // lista para armazenar o caminho feito com menor custo
+	int u, v;
+	int destino;
+	int weight;
+	int dist;
+	list<no>::iterator p; // iterator para varrer a lista adj
+	int custo = 0; // var aux para armazenar o custo do caminho
+	list<int>::iterator c;
+
+	for(u = 0; u < nVertices; u++)
+	{
+		intree[u] = false;
+		distance[u] = INT_MAX;
+		parent[u] = -1;
+	}
+	distance[start] = 0;
+	v = start;
+	while(intree[v] == false)
+	{
+		intree[v] = true;
+		for(p = adj[v].begin(); p != adj[v].end(); p++)
+		{
+			destino = p->v;
+			weight = p->peso;
+			if(distance[destino] > distance[v] + weight)
+			{
+				distance[destino] = distance[v] + weight;
+				parent[destino] = v;
+			}
+		}
+		v = 0;
+		dist = INT_MAX;
+		for(u = 0; u < nVertices; u++)
+		{
+			if(intree[u] == false && dist > distance[u])
+			{
+				dist = distance[u];
+				v = u;
+			}
+		}
+	}
+
+	// salvando o end na var u para poder fazer o controle de parents
+	u = end;
+	// colocando o elemento final no primeiro lugar da fila
+	caminho.push_front(end);
+	// salvando o caminho na fila
+	while(parent[u] != -1) // se parents for -1, quer dizer que não tem mais caminhos
+	{
+		caminho.push_front(parent[u]);
+		u = parent[u];
+	}
+	// salvando o custo
+	resp = distance[end]; // o custo, por ser acumulativo, é igual a distancia do último vértice
+	return caminho;
+}
+
+int main()
+{
+	list<no> adj[100]; // lista de adjacencia
+	int u, v; // vertices de origem e destino de cada aresta
+	int peso; // peso da aresta
+	int nVertices; // numero de vertices do grafo
+	list<no>::iterator p; // iterator para varrer a lista de adjacência
+	int orientado = 0; // 1:orientado, 0:não orientado
+	int start; // vértice inicial da árvore
+	int end; // vértice final da árvore
+
+	int qntPassageiros = 0;
+
+	cout << "Entre com a quantidade de casas na cidade" << endl;
+	cin >> nVertices;
+
+	int N;
+	cout << "Entre com a quantidade de passageiros" << endl;
+	cin >> N;
+
+	cout << "Insira sua localizacao inicial" << endl;
+	cin >> start;
+
+	pessoitas passageiros[100];
+
+	bool origemPag[N];
+	bool destinoPag[N];
+
+	for(int i = 0; i < N; i++)
+	{
+		origemPag[i] = false;
+		destinoPag[i] = false;
+	}
+
+	// entrando com a origem e o destino de cada passageiro
+	for (int i = 0; i < N; i++)
+	{
+
+		cout << "Entre com a origem e o destino do passageiro " << i << endl;
+		cin >> passageiros[i].origem >> passageiros[i].destino;
+
+	}
+  
+  cout << "Insira os vertices e as distancias entre os pontos" << endl;
+	cin >> u >> v >> peso;
+	// criando o grafo
+	while(u != -1 && v != -1 && peso != -1)
+	{
+		cria_aresta(adj, u, v, peso, orientado);
+		cin >> u >> v >> peso;
+	}
+
+
+	int caminho = INT_MAX;
+	int caminho_destino = INT_MAX;
+	int p_aux;
+	int d_aux;
+	list<int> caminhoPass;
+	list<int> caminhoMelhorPass;
+	list<int> caminhoMelhorPass_destino;
+	list<int> caminhoFinal;
+	int x;
+
+	bool flag = true;
+
+	while(flag)
+	{
+		int menor = INT_MAX;
+		int menor_destino = INT_MAX;
+		// for para pegar passageiros
+		if(qntPassageiros <= 4)
+		{
+			for(int j = 0; j < N; j++)
+			{
+				if(origemPag[j] == false)
+				{
+					caminhoPass = dijkstra(adj, nVertices, start, passageiros[j].origem, caminho);
+					if(caminho < menor)
+					{
+						menor = caminho;
+						p_aux = j;
+						caminhoMelhorPass = caminhoPass;
+
+					}
+				}
+			}
+		}
+		// for para deixar passageiros
+		if(qntPassageiros != 0)
+		{
+			for(int j = 0; j < N; j++)
+			{
+				if(origemPag[j] == true && destinoPag[j] == false)
+				{
+					caminhoPass = dijkstra(adj, nVertices, start, passageiros[j].destino, caminho_destino);
+					if(caminho_destino < menor_destino)
+					{
+						menor_destino = caminho_destino;
+						d_aux = j;
+						caminhoMelhorPass_destino = caminhoPass;
+						//cout << "Custo para deixar o passageiro " << j << " = " << menor_destino << " no ponto " << passageiros[j].destino << endl;
+					}
+				}
+			}
+		}
+
+		if(menor < menor_destino)
+		{
+			origemPag[p_aux] = true;
+			start = passageiros[p_aux].origem;
+			caminhoFinal = caminhoMelhorPass;
+			qntPassageiros++;
+			cout << "Custo para pegar o passageiro " << p_aux << " = " <<  menor << " no ponto " << passageiros[p_aux].origem << endl;
+			caminho = INT_MAX;
+
+			cout << "Caminho: " << endl;
+			while(!caminhoFinal.empty())
+			{
+				x = *caminhoFinal.begin();
+				cout << x << " ";
+				caminhoFinal.pop_front();
+
+			}
+			cout << endl;
+		}
+		else if (menor_destino < menor)
+		{
+			destinoPag[d_aux] = true;
+			start = passageiros[d_aux].destino;
+			caminhoFinal = caminhoMelhorPass_destino;
+			qntPassageiros--;
+			cout << "Custo para deixar o passageiro " << d_aux << " = " <<  menor_destino << " no ponto " << passageiros[d_aux].destino << endl;
+			caminho_destino = INT_MAX;
+
+			cout << "Caminho: " << endl;
+			while(!caminhoFinal.empty())
+			{
+				x = *caminhoFinal.begin();
+				cout << x << " ";
+				caminhoFinal.pop_front();
+
+			}
+			cout << endl;
+		}
+
+		int cont = 0;
+		for(int s = 0; s < N; s++)
+		{
+
+			if(destinoPag[s] == true)
+			{
+				cont++;
+			}
+		}
+		if(cont == N)
+		{
+			flag = false;
+		}
+
+
+	}
+
+
+
+
+	return 0;
+}
+
+/* caso teste 1:
+6
+2
+5
+1 2 
+3 4
+1 2 1
+1 3 5
+1 4 7
+1 5 4
+1 6 9
+2 3 14
+2 4 6
+2 5 8
+2 6 11
+3 4 8
+3 5 10
+3 6 10
+4 5 12
+4 6 4
+6 5 8
+-1 -1 -1
+
+caso teste 2:
+6
+3
+1
+2 3
+5 1
+4 5
+1 2 1
+1 3 5
+1 4 7
+1 5 4
+1 6 9
+2 3 14
+2 4 6
+2 5 8
+2 6 11
+3 4 8
+3 5 10
+3 6 10
+4 5 12
+4 6 4
+6 5 8
+-1 -1 -1
+
+caso teste 3:
+5
+2
+1
+2 3 
+4 5
+1 2 1
+1 3 5
+1 4 7
+1 5 4
+1 6 9
+2 3 14
+2 4 6
+2 5 8
+2 6 11
+3 4 8
+3 5 10
+3 6 10
+4 5 12
+4 6 4
+6 5 8
+-1 -1 -1
+*/
