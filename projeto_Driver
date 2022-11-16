@@ -200,7 +200,7 @@ int main()
 			}
 		}
 
-		if(menor < menor_destino)
+		if(menor <= menor_destino)
 		{
 			origemPag[p_aux] = true;
 			start = passageiros[p_aux].origem;
