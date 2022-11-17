@@ -164,7 +164,7 @@ int main()
 		int menor = INT_MAX;
 		int menor_destino = INT_MAX;
 		// for para pegar passageiros
-		if(qntPassageiros <= 4)
+		if(qntPassageiros < 4)
 		{
 			for(int j = 0; j < N; j++)
 			{
