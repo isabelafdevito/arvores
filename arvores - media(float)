@@ -1,0 +1,109 @@
+#include<iostream>
+#include<list>
+#include <iomanip>
+
+using namespace std;
+
+// Struct para armazenar os elementos de uma árvore binária
+struct treenode
+{
+    float info;
+    treenode *esq;
+    treenode *dir;
+};
+typedef treenode *treenodeptr;
+
+// Insere elementos em uma árvore binária
+void tInsere(treenodeptr &p, float x)
+{
+    if (p == NULL) // raiz
+    {
+        p = new treenode;
+        p->info = x;
+        p->esq = NULL;
+        p->dir = NULL;
+    }
+    else if (x < p->info) // subarvore esquerda
+        tInsere(p->esq, x);
+    else // subarvore direita
+        tInsere(p->dir, x);
+}
+
+void tDestruir (treenodeptr &arvore)
+{
+    if (arvore != NULL)
+    {
+        tDestruir(arvore->esq);
+        tDestruir(arvore->dir);
+        delete arvore;
+    }
+    arvore = NULL;
+}
+
+
+float Folhas(treenodeptr &arvore)
+{
+    float f = 0;
+    if (arvore != NULL)
+    {
+        if(arvore->dir == 0 && arvore->esq == 0)
+            f++;
+
+        f +=	Folhas(arvore->dir);
+        //	cout << arvore->info << " ";
+        f +=	Folhas(arvore->esq);
+    }
+    return f;
+}
+    
+// Realiza um percurso em nível na árvore
+float calcMedia(treenodeptr arvore) {
+    float soma = 0;
+    float media; 
+    float f;
+    f = Folhas(arvore); 
+    
+    treenodeptr n;
+    list<treenodeptr> q;
+    if (arvore!=NULL)
+    {
+        q.push_back(arvore);
+        while (!q.empty())
+        {
+            n = *q.begin();
+            if(n->dir == 0 && n->esq == 0){
+            soma = soma + n->info;
+            cout << soma << endl;
+            }
+            q.pop_front();
+            if (n->esq != NULL)
+                q.push_back(n->esq);
+            if (n->dir != NULL)
+                q.push_back(n->dir);
+        }
+    }
+    
+    media = 1.0*(soma/f); 
+    return media; 
+}
+
+int main()
+{
+    treenodeptr arvore = NULL;
+    float x;
+    // Lendo elementos e inserindo na árvore
+    cin >> x;
+    while(x != -1)
+    {
+        tInsere(arvore, x);
+        cin >> x;
+    }
+    // Percurso em nível
+   
+    cout << fixed << setprecision(2);
+    cout << "media = " << calcMedia(arvore);
+    
+
+    
+    return 0;
+}
